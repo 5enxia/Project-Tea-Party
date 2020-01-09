@@ -1,7 +1,5 @@
 
 #pragma once
-#include <stireg.h>
-using namespace std;
 
 // DataList
 // Seq No
