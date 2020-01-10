@@ -16,21 +16,27 @@ struct vec2d { double x; double y; double z; }; // two dimenstions Vector (doubl
 class MyTexture {
 public:
 	MyTexture() {}
-	MyTexture(std::string fn) {
-		pixels = stbi_load(fn.c_str(), &width, &height, &bpp, 0);						// Load Image
-		printf("Loaded Texture:%s\n", fn.c_str());											// Print Image Name
-	}
-	~MyTexture() { stbi_image_free(pixels); }
+	MyTexture(std::string fn);
+	~MyTexture();
 
 	void beginTexture();																				// Begin Texture Area
-	void endTexture() { glDisable(GL_TEXTURE_2D); glPopMatrix(); }				// End Texture Area
-	void drawRect(vec3d pos, vec3d rotate, double scale, double s, double t);	// Draw Rect Texture for DEBUG
+	void endTexture();
+	void drawTexture(vec3d pos, vec3d rotate, double scale, double s, double t);	// Draw Rect Texture for DEBUG
 
 private:
 	int width, height;			// Image Size
 	int bpp;							// Bit size per Pixel
 	unsigned char* pixels;	// Image Data
 };
+
+MyTexture::MyTexture(std::string fn) {
+	pixels = stbi_load(fn.c_str(), &width, &height, &bpp, 0);						// Load Image
+	printf("Loaded Texture:%s\n", fn.c_str());
+}
+
+MyTexture::~MyTexture() {
+	stbi_image_free(pixels);
+}
 
 /*
 * Begin Texture Area
@@ -53,7 +59,7 @@ void MyTexture::beginTexture() {
 /*
 * Draw Rect Texture for DEBUG
 */
-void MyTexture::drawRect(vec3d pos, vec3d rotate, double scale, double s, double t) {
+void MyTexture::drawTexture(vec3d pos, vec3d rotate, double scale, double s, double t) {
 	glTranslated(pos.x, pos.y, pos.z);
 	glScaled(scale, scale, scale);
 	glRotated(rotate.x, 1, 0, 0); glRotated(rotate.y, 0, 1, 0); glRotated(rotate.z, 0, 0, 1);
@@ -63,4 +69,9 @@ void MyTexture::drawRect(vec3d pos, vec3d rotate, double scale, double s, double
 	glTexCoord2d(s, t); glVertex3d(width / 2, height / 2, 0);
 	glTexCoord2d(0.0, t); glVertex3d(-width / 2, height / 2, 0);
 	glEnd();
+}
+
+void MyTexture::endTexture() {
+	glDisable(GL_TEXTURE_2D); 
+	glPopMatrix();
 }
