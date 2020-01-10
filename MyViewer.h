@@ -47,6 +47,10 @@ namespace Viewer {
 		}
 	}
 	//----------------------------------------------------------------------------//
+	void update(float as, float tilt) {
+
+	}
+
 	void update(double ex, double ey, double ez) {
 		degX = (180 / PI) * asin(ex);
 		degY = (180 / PI) * asin(ey);
