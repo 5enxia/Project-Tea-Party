@@ -1,7 +1,8 @@
 #pragma once
+
 #include "stdafx.h"
 
-#include "MyTexture.h" // Texture
+#include "MyTexture.h"
 #include "MyModel.h"
 #include "MyGeograph.h"
 
@@ -13,19 +14,22 @@ namespace Viewer {
 	vec2d angle;
 
 	// MODEL
-	objl::Loader miku;
+	//objl::Loader miku;
 
 	// texture
-	MyTexture mikuTextrues[4] = {
-		MyTexture("Miku/Miku.png"),
-		MyTexture("Miku/Miku2.png"),
-		MyTexture("Miku/Miku3.png"),
-		MyTexture("Miku/Miku1.png"),
-	};
+	//MyTexture mikuTextrues[4] = {
+	//	MyTexture("Miku/Miku.png"),
+	//	MyTexture("Miku/Miku2.png"),
+	//	MyTexture("Miku/Miku3.png"),
+	//	MyTexture("Miku/Miku1.png"),
+	//};
 	MyTexture penguin = MyTexture("img/penguin.png");
 
+	// Valiable
 	double degX, degY, degZ = 0;
 	double bias = 45; // Bias (degrees)
+	float as = 0;
+	float tilt = 0;
 
 	//----------------------------------------------------------------------------//
 	void setup(double width, double height) {
@@ -41,10 +45,10 @@ namespace Viewer {
 		glShadeModel(GL_SMOOTH);
 
 		// Load Model 
-		miku.LoadFile("Miku/Miku.obj");
+		/*miku.LoadFile("Miku/Miku.obj");
 		for (int i = 0; i < miku.LoadedMeshes.size(); i++) {
 			printf("%d\n", miku.LoadedMeshes[i].Vertices.size());
-		}
+		}*/
 	}
 	//----------------------------------------------------------------------------//
 	void update(float as, float tilt) {
