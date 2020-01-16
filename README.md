@@ -12,7 +12,7 @@ OpenGLにおいて、デフォルトでは存在しない形のオブジェク�
 ## MyGraph
 グラフ描画に関するユーティリティ
 
-## MyMesurement
+## MyEvaluation
 測定回数管理や測定結果の管理をするコード
 
 ## MyModel
