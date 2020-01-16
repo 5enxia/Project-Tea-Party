@@ -8,82 +8,95 @@
 
 using namespace std;
 
-class CSV_Loader
+class CSV
 {
-public:
-	CSV_Loader(string fn){
-		this->fn;
-	};
-	~CSV_Loader() {
-		data.clear();
-	};
-
-	bool load();
-	bool load(int num);
-	void print();
-	vector<vector<float>> getData() {
-		return this->data;
-	}
-
-	
 private:
 	string fn;
-	vector<string> split(string& input, char delimiter);
+	vector <vector<string>> cells;
+
+public:
+	CSV() {};
+	CSV(string fn) {
+		this->fn = fn;
+	};
+	~CSV() {
+		cells.clear();
+	};
+
+	void load() {
+		_load(this->fn);
+	};
+	void load(string fn) {
+		_load(fn);
+	};
+
+	void setCells(vector <vector<string>> cells) {
+		this->cells = cells;
+	}
+
+	vector <vector<string>> getCells() {
+		return cells;
+	}
+
+	void write() {
+		_write(this->fn);
+	};
+	void write(string fn) {
+		_write(fn);
+	};
+
+	void print() {
+		for (int i = 0; i < cells.size(); i++) {
+			stringstream ss;
+			for (int j = 0; j < cells[i].size(); j++) {
+				ss << cells[i][j] << ",";
+			}
+			cout << ss.str() << endl;
+		}
+	};
 
 private:
-	vector<vector<float>> data;
-	void func(string line);
+	void _load(string fn);
+	void _write(string fn);
+	vector<string> _split(string& input, char delimiter);
 };
 
-
-bool CSV_Loader::load()
-{
-	ifstream ifs(this->fn);
+void CSV::_load(string fn) {
+	ifstream ifs(fn);
+	unsigned int count = 0;
 	string line;
 	while (getline(ifs, line)) {
-		this->func(line);
+		cells.push_back(vector<string>());
+		vector<string> row = _split(line, ',');
+		for (int i = 0; i < row.size(); i++) {
+			cells[count].push_back(row[i]);
+		}
+		count++;
 	}
-	return true;
 }
 
-inline bool CSV_Loader::load(int num)
+inline void CSV::_write(string fn)
 {
-	ifstream ifs(this->fn);
-	string line;
-	for (int j = 0; j < num; j++)
-	{
-		this->func(line);
+	ofstream ofs(fn, ios::app);
+	for (int i = 0; i < cells.size(); i++) {
+		unsigned int len = cells[i].size();
+		for (int j = 0; j < len; j++) {
+			ofs << cells[i][j];
+			if (j != (len - 1)) {
+				ofs << ",";
+			}
+		}
+		ofs << endl;
 	}
-	return true;
+	ofs.close();
 }
 
-void CSV_Loader::func(string line) {
-	data.push_back(vector<float>());
-	vector<string> strvec = split(line, ',');
-	for (int i = 0; i < strvec.size(); i++) {
-		data[data.size() - 1].push_back(stof(strvec[i]));
-	}
-};
-
-vector<string> CSV_Loader::split(string& input, char delimiter) {
+vector<string> CSV::_split(string& input, char delimiter) {
 	istringstream stream(input);
 	string field;
-	vector<string> result;
+	vector<string> row;
 	while (getline(stream, field, delimiter)) {
-		result.push_back(field);
+		row.push_back(field);
 	}
-	return result;
-}
-
-void CSV_Loader::print() {
-	for (int i = 0; i < data.size(); i++)
-	{
-		stringstream ss;
-		for (int j = 0; j < data[i].size(); j++)
-		{
-			ss << data[i][j];
-			ss << ', ';
-		}
-		cout << ss.str() << endl;
-	}
+	return row;
 }

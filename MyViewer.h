@@ -23,7 +23,7 @@ namespace Viewer {
 	//	MyTexture("Miku/Miku3.png"),
 	//	MyTexture("Miku/Miku1.png"),
 	//};
-	MyTexture penguin = MyTexture("img/penguin.png");
+	MyTexture penguin = MyTexture("src/img/penguin.png");
 
 	// Valiable
 	double degX, degY, degZ = 0;

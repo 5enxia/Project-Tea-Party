@@ -1,6 +1,7 @@
 #pragma once
 #include <cmath>
 #include <string>
+#include "MyCSV.h"
 
 using namespace std;
 
@@ -20,13 +21,13 @@ enum
 struct stls
 {
 	float min;
-	float middle;
+	float mid;
 	float max;
 };
 
 struct results {
-	float as;
 	stls stl;
+	float as;
 	unsigned int elegance;
 	unsigned int learning;
 };
@@ -36,10 +37,11 @@ struct results {
 class Evaluation
 {
 public:
-	static unsigned int subjects;
-	static unsigned int getSubjects();
+	static int subjects;
 
 private:
+
+	unsigned int id;
 	unsigned int count;
 
 	stls stl;
@@ -47,33 +49,41 @@ private:
 	unsigned int elegance;
 	unsigned int learning;
 
-	results first_result;
-	results second_result;
+	results first;
+	results second;
+	
 
 public:
 	Evaluation() {
-		subjects++;
+		_getsubjects("src/data/subjects.txt");
 		count = 0;
 		stl = { 0,0,0 };
-		as = 0;
-		elegance = 0;
-		learning = 0;
-		first_result = { as, stl, elegance, learning};
-		second_result = { as, stl, elegance, learning};
+		as = elegance = learning = 0;
+		first = second = { {0,0,0},0,0,0 };
 	};
 	~Evaluation() {};
 
 	// setter(update, save)
+	void increaseCount() {
+		this->count++;
+	};
 	void updateAS(float as);
 	void updateSTL(float stl);
+	void setResults();
 	void saveResults();
 
 	// getter
+	int getID() {
+		return id;
+	}
+	static int getSubjects() {
+		return Evaluation::subjects;
+	}
 	unsigned int getCount() { 
 		return count;
 	};
 	float getSTL() {
-		return (stl.max - stl.middle);
+		return (stl.max - stl.mid);
 	};
 	float getAS() {
 		return as;
@@ -86,32 +96,55 @@ public:
 	};
 
 
+	// util
+	vector <string> conv2csv() {
+		vector <string> row;
+		row.push_back(to_string(id));
+		_setresult(row, first);
+		_setresult(row, second);
+		return row;
+	}
+	void retry() {
+		count = 0;
+		reset();
+	}
+
 private:
-	void updateCount();
 	string evaluateElegance();
 	string evaluateLearning();
 	bool linersolver(float x);
 	bool ellipsesolver(float x, float y);
 	void reset();
-};
 
-unsigned int Evaluation::subjects;
-inline unsigned int Evaluation::getSubjects()
-{
-	return subjects;
-}
+	void _getsubjects(string fn) {
+		fstream fs(fn);
+		string line;
+		getline(fs, line);
+		subjects = stoi(line);
+		id = subjects;
+		subjects++;
+		fs.seekp(ios::beg);
+		fs << to_string(subjects) << endl;
+		fs.close();
+	}
+
+	void _setresult(vector<string>& row, results res) {
+		row.push_back(to_string(res.stl.min));
+		row.push_back(to_string(res.stl.mid));
+		row.push_back(to_string(res.stl.max));
+		row.push_back(to_string(res.as));
+		row.push_back(to_string(res.elegance));
+		row.push_back(to_string(res.learning));
+	}
+};
+int Evaluation::subjects;
+
 
 // update variable
-void Evaluation::updateCount()
-{
-	if (count == 0) count = 1;
-	else count = 0;
-}
-
 void  Evaluation::updateSTL(float stl) {
 	if (stl < this->stl.min) this->stl.min = stl;
 	if (this->stl.max < stl) this->stl.max = stl;
-	this->stl.middle = (this->stl.max + this->stl.min)/2;
+	this->stl.mid = (this->stl.max + this->stl.min)/2;
 }
 
 void Evaluation::updateAS(float as)
@@ -121,23 +154,34 @@ void Evaluation::updateAS(float as)
 
 
 // data storing
-inline void Evaluation::saveResults()
+inline void Evaluation::setResults()
 {
 	if (getCount() == 0) {
-		first_result.as = as;
-		first_result.stl = stl;
-		first_result.elegance = elegance;
-		first_result.learning = learning;
+		first.as = as;
+		first.stl = stl;
+		first.elegance = elegance;
+		first.learning = learning;
 	}
 	else
 	{
-		second_result.as = as;
-		second_result.stl = stl;
-		second_result.elegance = elegance;
-		second_result.learning = learning;
+		second.as = as;
+		second.stl = stl;
+		second.elegance = elegance;
+		second.learning = learning;
 	}
-	updateCount();
 	reset();
+}
+
+void Evaluation::saveResults() {
+
+	CSV csv;
+	vector <vector<string>> cells;
+	vector <string> row = { to_string(id) };
+	_setresult(row, first);
+	_setresult(row, second);
+	cells.push_back(row);
+	csv.setCells(cells);
+	csv.write("src/data/results.txt");
 }
 
 inline void Evaluation::reset()
