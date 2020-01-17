@@ -62,20 +62,20 @@ namespace Viewer {
 			loading(deg);
 		}
 		else{
-			if (elegance == 0) {
+			if (elegance == 1) {
 				elegant_images[0].beginTexture(false);
 				elegant_images[0].drawTexture({ 0,0,0 }, { 180,0,0 }, 0.005, 1, 1);
 				elegant_images[0].endTexture();
 			}
-			else if (elegance == 1) {
+			else if (elegance == 2) {
 				elegant_images[1].beginTexture(false);
 				elegant_images[1].drawTexture({ 0,0,0 }, { 180,0,0 }, 0.01, 1, 1);
 				elegant_images[1].endTexture();
 			}
 			else {
-				elegant_images[1].beginTexture(false);
-				elegant_images[1].drawTexture({ 0,0,0 }, { 180,0,0 }, 0.01, 1, 1);
-				elegant_images[1].endTexture();
+				elegant_images[2].beginTexture(false);
+				elegant_images[2].drawTexture({ 0,0,0 }, { 180,0,0 }, 0.01, 1, 1);
+				elegant_images[2].endTexture();
 			}
 		}
 
