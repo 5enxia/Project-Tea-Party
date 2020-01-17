@@ -9,7 +9,7 @@ void drawModel(objl::Loader& model, MyTexture* textures, vec3d pos, vec3d rotate
 	glScaled(scale, scale, scale);
 	for (int i = 0; i < model.LoadedMeshes.size(); i++)
 	{
-		textures[i].beginTexture();
+		textures[i].beginTexture(true);
 		glBegin(GL_TRIANGLES);
 		for (int j = 0; j < model.LoadedMeshes[i].Vertices.size(); j++)
 		{
@@ -26,5 +26,13 @@ void drawModel(objl::Loader& model, MyTexture* textures, vec3d pos, vec3d rotate
 		glEnd();
 		textures[i].endTexture();
 	}
+	glPopMatrix();
+}
+
+void drawTeapot(vec3d pos, vec3d rotate, float size) {
+	glPushMatrix();
+	glRotatef(rotate.x, 1, 0, 0); 	glRotatef(rotate.y, 0, 1, 0); glRotatef(rotate.z, 0, 0, 1);
+	glTranslated(pos.x, pos.y, pos.z);
+	glutSolidTeapot(size);
 	glPopMatrix();
 }

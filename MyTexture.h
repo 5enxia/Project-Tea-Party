@@ -15,11 +15,10 @@ struct vec2d { double x; double y; double z; }; // two dimenstions Vector (doubl
 */
 class MyTexture {
 public:
-	MyTexture() {}
 	MyTexture(std::string fn);
 	~MyTexture();
 
-	void beginTexture();																				// Begin Texture Area
+	void beginTexture(bool alpha);																				// Begin Texture Area
 	void endTexture();
 	void drawTexture(vec3d pos, vec3d rotate, double scale, double s, double t);	// Draw Rect Texture for DEBUG
 
@@ -41,12 +40,17 @@ MyTexture::~MyTexture() {
 /*
 * Begin Texture Area
 */
-void MyTexture::beginTexture() {
+void MyTexture::beginTexture(bool alpha) {
 	glPushMatrix();
 	glEnable(GL_TEXTURE_2D);
 	// Load Image Data
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	if (alpha) {
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+	}
+	else {
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, pixels);
+	}
 	// Repeat Setting
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);

@@ -88,10 +88,16 @@ public:
 	float getAS() {
 		return as;
 	};
-	string getElegance() {
+	int getEleganceInt() {
+		return elegance;
+	}
+	int getLearningInt() {
+		return learning;
+	}
+	string getEleganceStr() {
 		return evaluateElegance();
 	};
-	string getLearning() {
+	string getLearningStr() {
 		return evaluateLearning();
 	};
 
@@ -231,6 +237,8 @@ bool Evaluation::linersolver(float x) {
 	b = 0;
 	float threshold = 0;
 	float y = a * x + b;
+
+	// y ‚ªè‡’l‚æ‚è¬‚³‚¢‚Æ‚«‚Étrue‚ğ•Ô‚·
 	if (y < threshold) return true;
 	else return false;
 }
@@ -247,6 +255,8 @@ bool Evaluation::ellipsesolver(float x, float y) {
 	center = { 0,0,1 };
 	val = { x,y,0 };
 	val.r = sqrtf(powf(val.x - center.x, 2) + powf(val.y - center.y, 2));
+
+	// ‰~‚Ì“à‘¤‚É‘¶İ‚·‚é‚Æ‚«‚Étrue‚ğ•Ô‚·
 	if (val.r < center.r) return true;
 	else return false;
 }

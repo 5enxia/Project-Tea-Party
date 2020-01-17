@@ -15,13 +15,33 @@ void drawAxis(float len) {
 	glColor3f(1.0, 1.0, 1.0);
 }
 
-void drawCube(double degX, double degY, double degZ) {
+void drawCube(vec3d pos, vec3d rotate, float size) {
 	glPushMatrix();
-	glRotatef(degX - 90, 1, 0, 0); // x
-	glRotatef(degY, 0, 1, 0); // y
-	glRotatef(degZ, 0, 0, 1); // z
-	drawAxis(0.5);
-	glutWireCube(1);
+	glTranslated(pos.x, pos.y, pos.z);
+	glRotatef(rotate.x, 1, 0, 0); 	glRotatef(rotate.y, 0, 1, 0); glRotatef(rotate.z, 0, 0, 1);
+	//drawAxis(0.5);
+	glutWireCube(size);
+	glPopMatrix();
+}
+
+void drawSphere(vec3d pos, vec3d rotate, float radius) {
+	glPushMatrix();
+	glTranslated(pos.x, pos.y, pos.z);
+	glRotatef(rotate.x, 1, 0, 0); 	glRotatef(rotate.y, 0, 1, 0); glRotatef(rotate.z, 0, 0, 1);
+	//drawAxis(0.5);
+	glutSolidSphere(radius, 32, 32);
+	glPopMatrix();
+}
+
+void loading(float deg) {
+	glPushMatrix();
+	glRotated(deg, 0, 0, 1);
+	for (int i = 0; i < 9; i++) {
+		float rad = 2 * PI / 9 * i;
+		float x = cosf(rad) / 4;
+		float y = sinf(rad) / 4;
+		drawSphere({ x,y,0 }, { 0,0,0 }, 0.05);
+	}
 	glPopMatrix();
 }
 

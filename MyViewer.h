@@ -13,23 +13,21 @@ namespace Viewer {
 	unsigned char mouseFlag = GL_FALSE;
 	vec2d angle;
 
-	// MODEL
-	//objl::Loader miku;
-
-	// texture
-	//MyTexture mikuTextrues[4] = {
-	//	MyTexture("Miku/Miku.png"),
-	//	MyTexture("Miku/Miku2.png"),
-	//	MyTexture("Miku/Miku3.png"),
-	//	MyTexture("Miku/Miku1.png"),
-	//};
-	MyTexture penguin = MyTexture("src/img/penguin.png");
+	MyTexture elegant_images[3] = {
+		MyTexture("src/img/rosehip.png"),
+		MyTexture("src/img/orengepekoe.png"),
+		MyTexture("src/img/darjiling.png")
+	};
 
 	// Valiable
-	double degX, degY, degZ = 0;
-	double bias = 45; // Bias (degrees)
+	double deg = 0;
+
 	float as = 0;
 	float tilt = 0;
+
+	int scene = 0;
+	int elegance = 0;
+	int learning = 0;
 
 	//----------------------------------------------------------------------------//
 	void setup(double width, double height) {
@@ -40,48 +38,46 @@ namespace Viewer {
 		glLoadIdentity();
 		gluPerspective(60.0, aspect, 0.01, 20.0);
 
-		gluLookAt(0.0, 1.0, 2.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+		//gluLookAt(0.0, 1.0, 2.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+		gluLookAt(0.0, 0.0, 2.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
 
 		glShadeModel(GL_SMOOTH);
 
-		// Load Model 
-		/*miku.LoadFile("Miku/Miku.obj");
-		for (int i = 0; i < miku.LoadedMeshes.size(); i++) {
-			printf("%d\n", miku.LoadedMeshes[i].Vertices.size());
-		}*/
+		
 	}
 	//----------------------------------------------------------------------------//
-	void update(float as, float tilt) {
-
+	void update() {
+		deg += 180 / PI / 600;
 	}
 
 	void update(double ex, double ey, double ez) {
-		degX = (180 / PI) * asin(ex);
-		degY = (180 / PI) * asin(ey);
-		degZ = (180 / PI) * asin(ez);
+		deg += 180/PI / 600;
 	}
 	//----------------------------------------------------------------------------//
 	void draw() {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // OpenGL‚É‚æ‚é•`‰æ
 		glEnable(GL_DEPTH_TEST);
-
-		// axis
-		glPushMatrix();
-		glTranslatef(-1.2, -1.2, 0);
-		drawAxis(0.25);
-		double div = 0.3;
-		glRasterPos2f(0 + div, 0); glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, 'x');
-		glRasterPos2f(0, 0 + div); glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, 'y');
-		glRasterPos2f(0 - div, 0 - div);	glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, 'z');
-		glPopMatrix();
-
-		// Cube
-		drawCube(degX, degY, degZ);
-
-		// Picture (Single Texture)
-		penguin.beginTexture();
-		penguin.drawTexture({ 0,0,0 }, { 135,0,0 }, 0.005,1, 1);
-		penguin.endTexture();
+		
+		if (scene == 0) {
+			loading(deg);
+		}
+		else{
+			if (elegance == 0) {
+				elegant_images[0].beginTexture(false);
+				elegant_images[0].drawTexture({ 0,0,0 }, { 180,0,0 }, 0.005, 1, 1);
+				elegant_images[0].endTexture();
+			}
+			else if (elegance == 1) {
+				elegant_images[1].beginTexture(false);
+				elegant_images[1].drawTexture({ 0,0,0 }, { 180,0,0 }, 0.01, 1, 1);
+				elegant_images[1].endTexture();
+			}
+			else {
+				elegant_images[1].beginTexture(false);
+				elegant_images[1].drawTexture({ 0,0,0 }, { 180,0,0 }, 0.01, 1, 1);
+				elegant_images[1].endTexture();
+			}
+		}
 
 		glDisable(GL_DEPTH_TEST);
 		glFlush();
