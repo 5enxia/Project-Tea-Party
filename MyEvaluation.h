@@ -43,9 +43,11 @@ private:
 
 	unsigned int id;
 	unsigned int count;
+	
 
 	stls stl;
 	float as;
+	float stl_;
 	unsigned int elegance;
 	unsigned int learning;
 
@@ -60,6 +62,8 @@ public:
 		stl = { 0,0,0 };
 		as = elegance = learning = 0;
 		first = second = { {0,0,0},0,0,0 };
+
+		stl_ = 0;
 	};
 	~Evaluation() {};
 
@@ -83,7 +87,8 @@ public:
 		return count;
 	};
 	float getSTL() {
-		return (stl.max - stl.mid);
+		//return (stl.max - stl.mid);
+		return stl_;
 	};
 	float getAS() {
 		return as;
@@ -147,10 +152,11 @@ int Evaluation::subjects;
 
 
 // update variable
-void  Evaluation::updateSTL(float stl) {
-	if (stl < this->stl.min) this->stl.min = stl;
+void  Evaluation::updateSTL(float _stl) {
+	/*if (stl < this->stl.min) this->stl.min = stl;
 	if (this->stl.max < stl) this->stl.max = stl;
-	this->stl.mid = (this->stl.max + this->stl.min)/2;
+	this->stl.mid = (this->stl.max + this->stl.min)/2;*/
+	this->stl_ += _stl;
 }
 
 void Evaluation::updateAS(float as)
@@ -204,11 +210,11 @@ inline void Evaluation::reset()
 // evaluate function
 string Evaluation::evaluateElegance()
 {
-	if (true) {
+	if (false) {
 		elegance = ELEGANT;
 		return "ELEGANT";
 	}
-	else if(true){
+	else if(false){
 		elegance = COMMON;
 		return "COMMON";
 	}
