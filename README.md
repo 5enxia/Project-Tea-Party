@@ -1,5 +1,7 @@
 # Project Tea Party | Interaction Demo App
 
+Related work: [Otonoko](https://github.com/5enxia/Otonoko)
+
 ## MyCSV
 CSV形式のテストデータの読み込みを抽象化するコード
 
